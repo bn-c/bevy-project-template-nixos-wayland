@@ -1,4 +1,6 @@
 # An opinionated Template for Bevy project using Nix
+This is a template tailored for my personal use, I hope you find it helpful.
+And go check out the original repo: https://github.com/drxm1/bevy-project-template-nixos-wayland
 
 ## 🚀 Quick Start
 
