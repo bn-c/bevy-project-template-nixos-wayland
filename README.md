@@ -1,21 +1,21 @@
-# 🎮 Bevy Starter Template for NixOS
-
-A streamlined template for Bevy game development on NixOS, leveraging direnv and Nix flakes for a seamless setup. Multi-crate structure for better code organization.
-
-## 🌟 Features
-- **Multi-Crate Structure**: Separate `app-bevy` and `lib-utils` crates for better organization
-- **Optimized Compilation**: Fast linking with LLD
-- **Nightly Rust**: Latest features
-- **Bevy Enhancements**: Dynamic linking and Wayland support
-- **Nix-Powered**: Consistent development environment
+# An opinionated Template for Bevy project using Nix
 
 ## 🚀 Quick Start
 
+### Running the example project
 ```bash
-git clone https://github.com/drxm1/bevy-project-template-nixos-wayland.git
+git clone https://github.com/bn-c/bevy-project-template-nixos-wayland
 cd bevy-project-template-nixos-wayland
 direnv allow
 cargo run -p app-bevy
+```
+
+### Configuring rust toolchain
+Simply edit the `rust-toolchain.toml`
+```toml
+[toolchain]
+channel = "nightly"
+components = ["rustfmt", "clippy", "rust-src", "rust-analyzer", "clippy"] 
 ```
 
 ## 🛠 Project Structure
@@ -40,7 +40,7 @@ cargo run -p app-bevy
 
 ## 📝 Notes
 
-- Requires Nix and direnv
+- Requires [Nix](https://nixos.org/) and [direnv](https://direnv.net/)
 - `.direnv` is gitignored
 - Update `flake.lock` with `nix flake update` after `flake.nix` changes
 
