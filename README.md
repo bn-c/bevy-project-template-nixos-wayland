@@ -18,6 +18,14 @@ channel = "nightly"
 components = ["rustfmt", "clippy", "rust-src", "rust-analyzer", "clippy"] 
 ```
 
+And update `flake.lock` with `nix flake update` after changes. 
+
+## 📝 Notes
+
+- Requires [Nix](https://nixos.org/) and [direnv](https://direnv.net/)
+  - For my NixOS setup, I enabled direnv using `programs.direnv.enable = true;` in `configuration.nix`
+- Works for me using VSCode: [direnv extension](https://marketplace.visualstudio.com/items?itemName=cab404.vscode-direnv)
+
 ## 🛠 Project Structure
 
 - `Cargo.toml`: Workspace configuration
@@ -37,13 +45,6 @@ components = ["rustfmt", "clippy", "rust-src", "rust-analyzer", "clippy"]
 - **Nix Flakes**: Reproducible development setup
 - **Direnv**: Automatic environment loading
 - **Rust Nightly**: Latest features necessary with our build flags
-
-## 📝 Notes
-
-- Requires [Nix](https://nixos.org/) and [direnv](https://direnv.net/)
-- `.direnv` is gitignored
-- Update `flake.lock` with `nix flake update` after `flake.nix` changes
-- Works for me using VSCode: [direnv extension](https://marketplace.visualstudio.com/items?itemName=cab404.vscode-direnv)
 
 ## 🚫 Limitations
 
