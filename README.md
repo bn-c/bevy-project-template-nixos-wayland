@@ -22,9 +22,26 @@ And update `flake.lock` with `nix flake update` after changes.
 
 ## 📝 Notes
 
+### Setup
 - Requires [Nix](https://nixos.org/) and [direnv](https://direnv.net/)
   - For my NixOS setup, I enabled direnv using `programs.direnv.enable = true;` in `configuration.nix`
 - Works for me using VSCode: [direnv extension](https://marketplace.visualstudio.com/items?itemName=cab404.vscode-direnv)
+
+### Debugging
+
+- On NixOS, due to VSCode debugger extension comes with dynamic linked `.so`, I used `nix-ld` for my setup:
+```nix
+programs.nix-ld = {
+   enable = true;
+   libraries = with pkgs; [
+   stdenv.cc.cc.lib 
+   glibc
+   zlib 
+   ncurses 
+   ];
+};
+```
+- And also requires the accompanying `.vscode/launch.json`
 
 ## 🛠 Project Structure
 

@@ -10,7 +10,6 @@ result
 .direnv
 
 # Editor-Specific
-.vscode/
 .idea/
 *.swp
 *.swo
