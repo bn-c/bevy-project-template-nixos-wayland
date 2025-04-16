@@ -1,89 +1,47 @@
-#![allow(dead_code)]
 use bevy::prelude::*;
-
-use lib_utils::UtilsPlugin;
-
-/* COMPONENTS:
- * Rust structs that implement the 'Component' trait */
-
-#[derive(Component)]
-struct Position {
-    x: f32,
-    y: f32,
-}
-
-#[derive(Component)]
-struct Person;
-
-#[derive(Component)]
-struct Name(String);
-
-/* SYSTEMS:
- * Normal rust functions */
-
-// EXAMPLE SYSTEMS
-fn print_position_system(query: Query<&Position>) {
-    for position in &query {
-        println!("position: {} {}", position.x, position.y);
-    }
-}
-fn hello_world() {
-    println!("hello world!");
-}
-
-// STARTUP SYSTEMS
-fn add_people(mut commands: Commands) {
-    commands.spawn((Person, Name("Elaina Proctor".to_string())));
-    commands.spawn((Person, Name("Renzo Hume".to_string())));
-    commands.spawn((Person, Name("Zayna Nieves".to_string())));
-}
-
-// OTHER SYSTEMS
-fn greet_people(time: Res<Time>, mut timer: ResMut<GreetTimer>, query: Query<&Name, With<Person>>) {
-    if timer.0.tick(time.delta()).just_finished() {
-        for name in &query {
-            println!("hello {}!", name.0)
-        }
-    }
-}
-fn update_people(mut query: Query<&mut Name, With<Person>>) {
-    for mut name in &mut query {
-        if name.0 == "Elaina Proctor" {
-            name.0 = "Elaina Hume".to_string();
-            break;
-        }
-    }
-}
-
-/* RESOURCES:
- * */
-#[derive(Resource)]
-struct GreetTimer(Timer);
-
-/* ENTITIES:
- * a simple type containing a unique integer */
-struct Entity(u64);
-
-/* PLUGINS
- * */
-pub struct HelloPlugin;
-impl Plugin for HelloPlugin {
-    fn build(&self, app: &mut App) {
-        app.insert_resource(GreetTimer(Timer::from_seconds(2.0, TimerMode::Repeating)))
-            .add_systems(Startup, add_people)
-            .add_systems(Update, (update_people, greet_people).chain());
-    }
-}
+use lib_utils::hello_world_system;
 
 fn main() {
     App::new()
-        .add_plugins((DefaultPlugins, HelloPlugin))
-        .add_plugins(UtilsPlugin)
-        // .add_systems(Startup, (
-        //     )
-        // )
-        // .add_systems(Update, (
-        //     )
-        // )
+        .add_plugins(DefaultPlugins)
+        .add_systems(Startup, (setup, hello_world_system))
+        .add_systems(Update, animate)
         .run();
+}
+
+#[derive(Resource)]
+struct AnimationState {
+    min: f32,
+    max: f32,
+    current: f32,
+    speed: f32,
+}
+
+fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn(Camera2d);
+    commands.insert_resource(AnimationState {
+        min: 128.0,
+        max: 512.0,
+        current: 128.0,
+        speed: 50.0,
+    });
+    commands.spawn(Sprite {
+        image: asset_server.load("image.png"),
+        image_mode: SpriteImageMode::Tiled {
+            tile_x: true,
+            tile_y: true,
+            stretch_value: 0.5, // The image will tile every 128px
+        },
+        ..default()
+    });
+}
+
+fn animate(mut sprites: Query<&mut Sprite>, mut state: ResMut<AnimationState>, time: Res<Time>) {
+    if state.current >= state.max || state.current <= state.min {
+        state.speed = -state.speed;
+    };
+    state.current += state.speed * time.delta_secs();
+    for mut sprite in &mut sprites {
+        sprite.custom_size = Some(Vec2::splat(state.current));
+    }
 }
