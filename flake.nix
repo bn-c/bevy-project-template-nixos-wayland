@@ -15,12 +15,9 @@
     ...
   }:
     flake-utils.lib.eachDefaultSystem (system: let
-      overrides = builtins.fromTOML (builtins.readFile ./rust-toolchain.toml);
       overlays = [(import rust-overlay)];
       pkgs = import nixpkgs {inherit system overlays;};
-      rustToolchain = pkgs.rust-bin.${overrides.toolchain.channel}.latest.default.override {
-        extensions = ["rust-src" "rust-analyzer" "clippy"];
-      };
+      rustToolchain = pkgs.rust-bin.fromRustupToolchainFile ./rust-toolchain.toml;
     in {
       formatter = pkgs.alejandra;
       devShells.default = pkgs.mkShell {
