@@ -43,6 +43,7 @@ components = ["rustfmt", "clippy", "rust-src", "rust-analyzer", "clippy"]
 - Requires [Nix](https://nixos.org/) and [direnv](https://direnv.net/)
 - `.direnv` is gitignored
 - Update `flake.lock` with `nix flake update` after `flake.nix` changes
+- Works for me using VSCode: [direnv extension](https://marketplace.visualstudio.com/items?itemName=cab404.vscode-direnv)
 
 ## 🚫 Limitations
 
